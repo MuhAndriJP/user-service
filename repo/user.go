@@ -9,6 +9,8 @@ import (
 
 type User interface {
 	CreateUser(context.Context, string, string, string) error
+	GetUserByEmail(context.Context, string) (entity.Users, error)
+	UpsertUser(context.Context, entity.Users) error
 }
 
 type UserRepo struct {
@@ -24,6 +26,21 @@ func (r *UserRepo) CreateUser(ctx context.Context, name, email, password string)
 		return
 	}
 
+	return
+}
+
+func (r *UserRepo) GetUserByEmail(ctx context.Context, email string) (res entity.Users, err error) {
+	res, err = r.dbSQL.GetUserByEmail(ctx, email)
+	if err != nil {
+		return
+	}
+	return
+}
+
+func (r *UserRepo) UpsertUser(ctx context.Context, user entity.Users) (err error) {
+	if err = r.dbSQL.Upsert(ctx, &user); err != nil {
+		return
+	}
 	return
 }
 

@@ -5,6 +5,7 @@ import (
 
 	pb "github.com/MuhAndriJP/user-service.git/grpc/user"
 	"github.com/MuhAndriJP/user-service.git/repo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RegisterUser struct {
@@ -12,7 +13,12 @@ type RegisterUser struct {
 }
 
 func (u *RegisterUser) Handle(ctx context.Context, req *pb.RegisterUserRequest) (err error) {
-	err = u.uRepo.CreateUser(ctx, req.Name, req.Email, req.Password)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		panic(err)
+	}
+
+	err = u.uRepo.CreateUser(ctx, req.Name, req.Email, string(hashedPassword))
 	if err != nil {
 		return
 	}

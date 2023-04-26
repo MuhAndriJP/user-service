@@ -7,17 +7,23 @@ import (
 	pb "github.com/MuhAndriJP/user-service.git/grpc/user"
 )
 
-// Server is a GRPC Server for payment snap service
 type Server struct {
 }
 
-// AuthAccessPublic handler
-func (srv *Server) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) (*pb.NoResponse, error) {
-	action.NewRegisterUser().Handle(ctx, req)
-	return &pb.NoResponse{}, nil
+func (srv *Server) RegisterUser(ctx context.Context, req *pb.RegisterUserRequest) (res *pb.NoResponse, err error) {
+	res = &pb.NoResponse{}
+	if err = action.NewRegisterUser().Handle(ctx, req); err != nil {
+		return
+	}
+	return
 }
 
-// NewServer create new Server
+func (srv *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (res *pb.LoginUserResponse, err error) {
+	res = &pb.LoginUserResponse{}
+	res, err = action.NewLoginUser().Handle(ctx, req)
+	return
+}
+
 func NewServerUser() *Server {
 	return &Server{}
 }
