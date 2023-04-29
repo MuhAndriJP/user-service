@@ -16,7 +16,7 @@ func Run() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	} else {
-		log.Println("Connect GRPC to port " + os.Getenv("port_grpc"))
+		log.Println("Connect GRPC " + lis.Addr().String())
 	}
 
 	grpcServer := grpc.NewServer()
