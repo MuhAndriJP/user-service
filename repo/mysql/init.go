@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/MuhAndriJP/user-service.git/entity"
@@ -12,10 +12,12 @@ import (
 var DB *gorm.DB
 
 func InitDB() {
-	usernameAndPassword := fmt.Sprint(os.Getenv("db_user")) + ":" + fmt.Sprint(os.Getenv("db_password"))
-	hostName := "tcp(" + fmt.Sprint(os.Getenv("db_host")) + ":" + fmt.Sprint(os.Getenv("db_port")) + ")"
-	urlConnection := usernameAndPassword + "@" + hostName + "/" + fmt.Sprint(os.Getenv("db_database")) + "?charset=utf8&parseTime=true&loc=UTC&tls=true"
-	// config := os.Getenv("CONNECTION_DB")
+	usernameAndPassword := os.Getenv("db_user") + ":" + os.Getenv("db_password")
+	hostName := "tcp(" + os.Getenv("db_host") + ":" + os.Getenv("db_port") + ")"
+	urlConnection := usernameAndPassword + "@" + hostName + "/" + os.Getenv("db_database") + "?charset=utf8&parseTime=true&loc=UTC"
+	if os.Getenv("app_env") == "prod" {
+		urlConnection += "&tls=true"
+	}
 
 	var e error
 	DB, e = gorm.Open(mysql.Open(urlConnection), &gorm.Config{})
@@ -23,6 +25,7 @@ func InitDB() {
 		panic(e)
 	}
 
+	log.Println("Connect MySQL ", urlConnection)
 	InitMigrate()
 }
 

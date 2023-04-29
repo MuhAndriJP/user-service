@@ -15,7 +15,7 @@ type RegisterUser struct {
 func (u *RegisterUser) Handle(ctx context.Context, req *pb.RegisterUserRequest) (err error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
-		panic(err)
+		return
 	}
 
 	err = u.uRepo.CreateUser(ctx, req.Name, req.Email, string(hashedPassword))

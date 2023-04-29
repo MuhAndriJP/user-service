@@ -20,12 +20,13 @@ func (u *LoginUser) Handle(ctx context.Context, req *pb.LoginUserRequest) (res *
 
 	user, err := u.uRepo.GetUserByEmail(ctx, req.Email)
 	if err != nil || user == (entity.Users{}) {
+		log.Println("User Not Found")
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
-		log.Println("Password Salah")
+		log.Println("Wrong Password")
 		return
 	}
 

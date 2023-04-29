@@ -16,7 +16,7 @@ type SQL struct {
 }
 
 func (m *SQL) Insert(ctx context.Context, user *entity.Users) (err error) {
-	if err = DB.Create(&user).Error; err != nil {
+	if err = DB.Debug().Create(&user).Error; err != nil {
 		return
 	}
 	return
@@ -24,14 +24,14 @@ func (m *SQL) Insert(ctx context.Context, user *entity.Users) (err error) {
 
 func (m *SQL) GetUserByEmail(ctx context.Context, email string) (user entity.Users, err error) {
 	user = entity.Users{}
-	if err = DB.Where("email = ?", email).First(&user).Error; err != nil {
+	if err = DB.Debug().Where("email = ?", email).First(&user).Error; err != nil {
 		return
 	}
 	return
 }
 
 func (m *SQL) Upsert(ctx context.Context, user *entity.Users) (err error) {
-	if err = DB.Save(&user).Error; err != nil {
+	if err = DB.Debug().Save(&user).Error; err != nil {
 		return
 	}
 	return
