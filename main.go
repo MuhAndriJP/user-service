@@ -8,16 +8,10 @@ import (
 	pb "github.com/MuhAndriJP/user-service.git/grpc/user"
 	"github.com/MuhAndriJP/user-service.git/repo/mysql"
 	"github.com/MuhAndriJP/user-service.git/server"
-	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
 	mysql.InitDB()
 	lis, err := net.Listen("tcp", ":"+os.Getenv("port_grpc"))
 	if err != nil {
