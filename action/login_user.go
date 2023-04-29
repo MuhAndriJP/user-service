@@ -2,6 +2,7 @@ package action
 
 import (
 	"context"
+	"log"
 
 	"github.com/MuhAndriJP/user-service.git/entity"
 	pb "github.com/MuhAndriJP/user-service.git/grpc/user"
@@ -24,6 +25,7 @@ func (u *LoginUser) Handle(ctx context.Context, req *pb.LoginUserRequest) (res *
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
 	if err != nil {
+		log.Println("Password Salah")
 		return
 	}
 
