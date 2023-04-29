@@ -24,6 +24,12 @@ func (srv *Server) LoginUser(ctx context.Context, req *pb.LoginUserRequest) (res
 	return
 }
 
+func (srv *Server) GetUserByEmail(ctx context.Context, req *pb.GetUserByEmailRequest) (res *pb.GetUserResponse, err error) {
+	res = &pb.GetUserResponse{}
+	res, err = action.NewGetUserByEmail().Handle(ctx, req)
+	return
+}
+
 func NewServerUser() *Server {
 	return &Server{}
 }

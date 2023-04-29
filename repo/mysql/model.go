@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/MuhAndriJP/user-service.git/entity"
+	"gorm.io/gorm"
 )
 
 type MySQL interface {
@@ -25,6 +26,9 @@ func (m *SQL) Insert(ctx context.Context, user *entity.Users) (err error) {
 func (m *SQL) GetUserByEmail(ctx context.Context, email string) (user entity.Users, err error) {
 	user = entity.Users{}
 	if err = DB.Debug().Where("email = ?", email).First(&user).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return user, nil
+		}
 		return
 	}
 	return
